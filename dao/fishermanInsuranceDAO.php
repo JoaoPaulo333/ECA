@@ -1,15 +1,15 @@
 <?php
 
 require_once "db/connection.php";
-require_once "classes/city.php";
+require_once "classes/guaranteeCrop.php";
 
-class cityDAO
+class fishermanInsuranceDAO
 {
-    public function remover($city){
+    public function remove($fi){
         global $pdo;
         try {
-            $statement = $pdo->prepare("DELETE FROM tb_city WHERE id_city = :id");
-            $statement->bindValue(":id", $city->getIdCity());
+            $statement = $pdo->prepare("DELETE FROM tb_fisherman_insurance WHERE idtb_fisherman_insurance = :id");
+            $statement->bindValue(":id", $fi->getIdtbFishermanInsurance());
             if ($statement->execute()) {
                 return "<script> alert('Registo foi excluído com êxito !'); </script>";
             } else {
@@ -20,18 +20,21 @@ class cityDAO
         }
     }
 
-    public function salvar($city){
+    public function save($fi){
         global $pdo;
         try {
-            if ($city->getIdCity() != "") {
-                $statement = $pdo->prepare("UPDATE tb_city SET str_name_city=:str_name_city, str_cod_siafi_city=:str_cod_siafi_city, tb_state_id_state=:tb_state_id_state WHERE id_city = :id;");
-                $statement->bindValue(":id", $city->getIdCity());
+            if ($fi->getIdtbGuaranteeCrop() != "") {
+                $statement = $pdo->prepare("UPDATE tb_fisherman_insurance SET  str_month=:str_month, str_year=:str_year, db_value=:db_value,tb_beneficiaries_id_beneficiaries=:tb_beneficiaries_id_beneficiaries, tb_city_id_city=:tb_city_id_city  WHERE idtb_fisherman_insurance = :id;");
+                $statement->bindValue(":id", $fi->getIdtbFishermanInsurance());
             } else {
-                $statement = $pdo->prepare("INSERT INTO tb_city (str_name_city, str_cod_siafi_city, tb_state_id_state) VALUES (:str_name_city, :str_cod_siafi_city, :tb_state_id_state)");
+                $statement = $pdo->prepare("INSERT INTO tb_fisherman_insurance (str_month, str_year, tb_beneficiaries_id_beneficiaries, db_value,tb_city_id_city,) VALUES (:str_month, :str_year, :db_value, :tb_beneficiaries_id_beneficiaries, :tb_city_id_city)");
             }
-            $statement->bindValue(":str_name_city",$city->getStrNameCity());
-            $statement->bindValue(":str_cod_siafi_city",$city->getStrCodSiafiCity());
-            $statement->bindValue(":tb_state_id_state",$city->getTbStateIdState());
+
+            $statement->bindValue(":str_month",$fi->getStrMonth());
+            $statement->bindValue(":str_year",$fi->getStrYear());
+            $statement->bindValue(":db_value",$fi->getDbValue());
+            $statement->bindValue(":tb_beneficiaries_id_beneficiaries",$fi->getTbBeneficiariesIdBeneficiaries());
+            $statement->bindValue(":tb_city_id_city",$fi->getTbCityIdCity());
 
             if ($statement->execute()) {
                 if ($statement->rowCount() > 0) {
@@ -47,18 +50,20 @@ class cityDAO
         }
     }
 
-    public function atualizar($city){
+    public function atualizar($gc){
         global $pdo;
         try {
-            $statement = $pdo->prepare("SELECT id_city, str_name_city, str_cod_siafi_city, tb_state_id_state FROM tb_city WHERE id_city = :id");
-            $statement->bindValue(":id", $city->getIdCity());
+            $statement = $pdo->prepare("SELECT idtb_fisherman_insurance, str_moth, str_year, db_value, tb_beneficiaries_id_beneficiaries, tb_city_id_city FROM tb_fisherman_insurance WHERE idtb_fisherman_insurance = :id");
+            $statement->bindValue(":id", $gc->getIdtbFishermanInsurance());
             if ($statement->execute()) {
                 $rs = $statement->fetch(PDO::FETCH_OBJ);
-                $city->setIdCity($rs->id_city);
-                $city->setStrNameCity($rs->str_name_city);
-                $city->setStrCodSiafiCity($rs->str_cod_siafi_city);
-                $city->setTbStateIdState($rs->tb_state_id_state);
-                return $city;
+                $gc->setIdtbFishermanInsurance($rs->idtb_fisherman_insurance);
+                $gc->setStrMonth($rs->str_month);
+                $gc->setStrYear($rs->str_year);
+                $gc->setDbValue($rs->db_value);
+                $gc->setTbBeneficiariesIdBeneficiaries($rs->tb_beneficiaries_id_beneficiaries);
+                $gc->setTbCityIdCity($rs->tb_city_id_city);
+                return $gc;
             } else {
                 throw new PDOException("<script> alert('Não foi possível executar a declaração SQL !'); </script>");
             }
@@ -84,15 +89,15 @@ class cityDAO
 
         /* Calcula a linha inicial da consulta */
         $linha_inicial = ($pagina_atual -1) * QTDE_REGISTROS;
-/*inner e como exibir */
+
         /* Instrução de consulta para paginação com MySQL */
-        $sql = "SELECT C.id_city, S.str_uf as tb_state, C.str_name_city, C.str_cod_siafi_city FROM tb_city C INNER JOIN tb_state S ON S.id_state = C.tb_state_id_state LIMIT {$linha_inicial}, " . QTDE_REGISTROS;
+        //$sql = "SELECT idtb_fisherman_insurance, str_month, str_year, db_value, tb_beneficiaries_id_beneficiaries, tb_city_id_city FROM tb_fisherman_insurance LIMIT {$linha_inicial}, " . QTDE_REGISTROS;
         $statement = $pdo->prepare($sql);
         $statement->execute();
         $dados = $statement->fetchAll(PDO::FETCH_OBJ);
 
         /* Conta quantos registos existem na tabela */
-        $sqlContador = "SELECT COUNT(*) AS total_registros FROM tb_city";
+        $sqlContador = "SELECT COUNT(*) AS total_registros FROM tb_fisherman_insurance";
         $statement = $pdo->prepare($sqlContador);
         $statement->execute();
         $valor = $statement->fetch(PDO::FETCH_OBJ);
@@ -126,22 +131,27 @@ class cityDAO
      <table class='table table-striped table-bordered'>
      <thead>
        <tr style='text-transform: uppercase;' class='active'>
-        <th style='text-align: center; font-weight: bolder;'>Code</th>
-        <th style='text-align: center; font-weight: bolder;'>Name</th>
-        <th style='text-align: center; font-weight: bolder;'>Code City</th>
-        <th style='text-align: center; font-weight: bolder;'>State</th>
+        <th style='text-align: center; font-weight: bolder;'>Id</th>
+        <th style='text-align: center; font-weight: bolder;'>Month</th>
+        <th style='text-align: center; font-weight: bolder;'>Year</th>
+        <th style='text-align: center; font-weight: bolder;'>Value</th>
+        <th style='text-align: center; font-weight: bolder;'>IdBeneficiaries</th>
+        <th style='text-align: center; font-weight: bolder;'>IdCity</th>
         <th style='text-align: center; font-weight: bolder;' colspan='2'>Actions</th>
+        
        </tr>
      </thead>
      <tbody>";
-            foreach ($dados as $city):
+            foreach ($dados as $fi):
                 echo "<tr>
-        <td style='text-align: center'>$city->id_city</td>
-        <td style='text-align: center'>$city->str_name_city</td>
-        <td style='text-align: center'>$city->str_cod_siafi_city</td>
-        <td style='text-align: center'>$city->tb_state</td>
-        <td style='text-align: center'><a href='?act=upd&id=$city->id_city' title='Alterar'><i class='ti-reload'></i></a></td>
-        <td style='text-align: center'><a href='?act=del&id=$city->id_city' title='Remover'><i class='ti-close'></i></a></td>
+        <td style='text-align: center'>$fi->idtb_fisherman_insurance</td>
+        <td style='text-align: center'>$fi->str_month</td>
+        <td style='text-align: center'>$fi->str_year</td>
+        <td style='text-align: center'>$fi->db_value</td>
+        <td style='text-align: center'>$fi->tb_beneficiaries_id_beneficiaries</td>
+        <td style='text-align: center'>$fi->tb_city_id_city</td>
+        <td style='text-align: center'><a href='?act=upd&id=$fi->idtb_fisherman_insurance' title='Alterar'><i class='ti-reload'></i></a></td>
+        <td style='text-align: center'><a href='?act=del&id=$fi->idtb_fisherman_insurance' title='Remover'><i class='ti-close'></i></a></td>
        </tr>";
             endforeach;
             echo "

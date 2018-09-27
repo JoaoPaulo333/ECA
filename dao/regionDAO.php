@@ -1,7 +1,7 @@
 <?php
 
-require_once "../db/connection.php";
-require_once "../classes/region.php";
+require_once "db/connection.php";
+require_once "classes/region.php";
 
 class regionDAO
 {
