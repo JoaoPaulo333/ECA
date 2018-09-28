@@ -8,7 +8,7 @@ class guaranteeCropDAO
     public function remove($gc){
         global $pdo;
         try {
-            $statement = $pdo->prepare("DELETE FROM tb_guarantee_crop WHERE id_guarantee_crop = :id");
+            $statement = $pdo->prepare("DELETE FROM tb_guarantee_crop WHERE idtb_guarantee_crop = :id");
             $statement->bindValue(":id", $gc->getIdtbGuaranteeCrop());
             if ($statement->execute()) {
                 return "<script> alert('Registo foi excluído com êxito !'); </script>";
@@ -52,7 +52,7 @@ class guaranteeCropDAO
     public function atualizar($gc){
         global $pdo;
         try {
-            $statement = $pdo->prepare("SELECT idtb_guarantee_crop, str_year, str_moth, db_value, tb_city_id_city, tb_beneficiaries_id_beneficiaries FROM tb_guarantee_crop WHERE idtb_guarantee_crop = :id");
+            $statement = $pdo->prepare("SELECT idtb_guarantee_crop, str_year, str_month, db_value, tb_city_id_city, tb_beneficiaries_id_beneficiaries FROM tb_guarantee_crop WHERE idtb_guarantee_crop = :id");
             $statement->bindValue(":id", $gc->getIdtbGuaranteeCrop());
             if ($statement->execute()) {
                 $rs = $statement->fetch(PDO::FETCH_OBJ);
