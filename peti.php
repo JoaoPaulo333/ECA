@@ -2,10 +2,10 @@
 
 require_once "classes/template.php";
 
-require_once "dao/fishermanInsuranceDAO.php";
-require_once "classes/fishermanInsurance.php";
+require_once "dao/petiDAO.php";
+require_once "classes/peti.php";
 
-$object = new fishermanInsuranceDAO();
+$object = new petiDAO();
 
 $template = new Template();
 
@@ -17,51 +17,56 @@ $template->mainpanel();
 // Verificar se foi enviando dados via POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = (isset($_POST["id"]) && $_POST["id"] != null) ? $_POST["id"] : "";
-    $str_month = (isset($_POST["str_moth"]) && $_POST["str_moth"] != null) ? $_POST["str_moth"] : "";
     $str_year = (isset($_POST["str_year"]) && $_POST["str_year"] != null) ? $_POST["str_year"] : "";
-    $db_value = (isset($_POST["db_value"]) && $_POST["db_value"] != null) ? $_POST["db_value"] : "";
-    $tb_beneficiaries_id_beneficiaries = (isset($_POST["tb_beneficiaries_id_beneficiaries"]) && $_POST["tb_beneficiaries_id_beneficiaries"] != null) ? $_POST["tb_beneficiaries_id_beneficiaries"] : "";
+    $str_month = (isset($_POST["str_moth"]) && $_POST["str_moth"] != null) ? $_POST["str_moth"] : "";
+    $str_benefit_situation = (isset($_POST["str_benefit_situation"]) && $_POST["str_benefit_situation"] != null) ? $_POST["str_benefit_situation"] : "";
+    $db_value_plot = (isset($_POST["db_value_plot"]) && $_POST["db_value_plot"] != null) ? $_POST["db_value_plot"] : "";
     $tb_city_id_city = (isset($_POST["tb_city_id_city"]) && $_POST["tb_city_id_city"] != null) ? $_POST["tb_city_id_city"] : "";
+    $tb_beneficiaries_id_beneficiaries = (isset($_POST["tb_beneficiaries_id_beneficiaries"]) && $_POST["tb_beneficiaries_id_beneficiaries"] != null) ? $_POST["tb_beneficiaries_id_beneficiaries"] : "";
 } else if (!isset($id)) {
     // Se não se não foi setado nenhum valor para variável $id
     $id = (isset($_GET["id"]) && $_GET["id"] != null) ? $_GET["id"] : "";
-    $str_month = null;
     $str_year = null;
-    $db_value = null;
-    $tb_beneficiaries_id_beneficiaries = null;
+    $str_month = null;
+    $str_benefit_situation = null;
+    $db_value_plot = null;
     $tb_city_id_city = null;
+    $tb_beneficiaries_id_beneficiaries = null;
 
 
 }
 
 if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "upd" && $id != "") {
 
-    $fishermanInsurance = new fishermanInsurance($id, '', '', '','','');
+    $peti = new peti($id, '', '', '','','','');
 
-    $resultado = $object->atualizar($fishermanInsurance);
-    $str_month = $resultado->getStrMonth();
+    $resultado = $object->atualizar($peti);
     $str_year = $resultado->getStrYear();
-    $db_value = $resultado->getDbValue();
-    $tb_beneficiaries_id_beneficiaries = $resultado->getTbBeneficiariesIdBeneficiaries();
+    $str_month = $resultado->getStrMonth();
+    $str_benefit_situation = $resultado->getStrBenefitSituation();
+    $db_value_plot = $resultado->getDbValuePlot();
     $tb_city_id_city = $resultado->getTbCityIdCity();
+    $tb_beneficiaries_id_beneficiaries = $resultado->getTbBeneficiariesIdBeneficiaries();
 
 }
 
-if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save" && $str_year != "" && $str_month!= "" && $db_value!= "") {
-    $fishermanInsurance = new fishermanInsurance($id, $str_month, $str_year, $db_value, $tb_beneficiaries_id_beneficiaries, $tb_city_id_city);
-    $msg = $object->save($fishermanInsurance);
+if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save" && $str_year != "" && $str_month!= "" && $db_value_plot!= ""&& $str_benefit_situation!= "") {
+    $peti = new peti($id, $str_year, $str_month, $str_benefit_situation, $db_value_plot, $tb_city_id_city, $tb_beneficiaries_id_beneficiaries);
+    var_dump($peti);
+    $msg = $object->save($peti);
     $id = null;
-    $str_month = null;
     $str_year = null;
-    $db_value = null;
-    $tb_beneficiaries_id_beneficiaries = null;
+    $str_month = null;
+    $str_benefit_situation = null;
+    $db_value_plot = null;
     $tb_city_id_city = null;
+    $tb_beneficiaries_id_beneficiaries = null;
 
 }
 
 if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
-    $fishermanInsurance = new fishermanInsurance($id, '', '', '','','');
-    $msg = $object->remove($fishermanInsurance);
+    $peti = new peti($id, '', '', '','','','');
+    $msg = $object->remove($peti);
     $id = null;
 }
 
@@ -73,8 +78,8 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
             <div class='col-md-12'>
                 <div class='card'>
                     <div class='header'>
-                        <h4 class='title'>Fisherman Insurance</h4>
-                        <p class='category'>List of Fisherman Insurance of the system</p>
+                        <h4 class='title'>PETI</h4>
+                        <p class='category'>List of PETI of the system</p>
 
                     </div>
                     <div class='content table-responsive'>
@@ -138,10 +143,16 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
                                 ?>
                             </select>
                             <br/>
-                            Value:
-                            <input class="form-control" type="number" maxlength="4" name="db_value" value="<?php
+                            Benefit Situation:
+                            <select class="form-control" name="str_benefit_situation">
+                                <option value='Não Sacado' selected>Não Sacado</option>"
+                                <option value='Sacado'>Sacado</option>"
+                            </select>
+                            <br/>
+                            Value Plot:
+                            <input class="form-control" type="number" name="db_value_plot" value="<?php
                             // Preenche o sigla no campo sigla com um valor "value"
-                            echo (isset($db_value) && ($db_value != null || $db_value != "")) ? $db_value : '';
+                            echo (isset($db_value_plot) && ($db_value_plot != null || $db_value_plot != "")) ? $db_value_plot : '';
                             ?>"/>
                             <br/>
 

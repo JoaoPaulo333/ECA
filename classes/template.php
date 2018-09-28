@@ -190,7 +190,7 @@ class Template
                     </a>
                 </li>
                 <li>
-                    <a href='fishermanInsurance.php'>
+                    <a href='peti.php'>
                         <i class=\"ti-world\"></i>
                         <p>PETI</p>
                     </a>
