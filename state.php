@@ -89,7 +89,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
                             ?>"/>
                             <br/>
                             Region:
-                            <select class="form-control" name="tb_state_id_state">
+                            <select class="form-control" name="tb_region_id_region">
                                 <?php
                                 $query = "SELECT * FROM tb_region order by str_name_region;";
                                 $statement = $pdo->prepare($query);
@@ -106,6 +106,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
                                     throw new PDOException("<script> alert('Não foi possível executar a declaração SQL !'); </script>");
                                 }
                                 ?>
+
                             </select>
                             <br/>
 

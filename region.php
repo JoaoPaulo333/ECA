@@ -33,8 +33,8 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "upd" && $id != "") {
     $region = new region($id, '');
 
     $resultado = $object->atualizar($region);
-    $str_nis = $resultado->getStrNis();
-    $str_name_person = $resultado->getStrNamePerson();
+    $id = $resultado->getIdRegion();
+    $str_name_region = $resultado->getStrNameRegion();
 
 }
 

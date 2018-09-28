@@ -2,10 +2,10 @@
 
 require_once "classes/template.php";
 
-require_once "dao/guaranteeCropDAO.php";
-require_once "classes/guaranteeCrop.php";
+require_once "dao/familyBagDAO.php";
+require_once "classes/familyBag.php";
 
-$object = new guaranteeCropDAO();
+$object = new familyBagDAO();
 
 $template = new Template();
 
@@ -19,7 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = (isset($_POST["id"]) && $_POST["id"] != null) ? $_POST["id"] : "";
     $str_year = (isset($_POST["str_year"]) && $_POST["str_year"] != null) ? $_POST["str_year"] : "";
     $str_month = (isset($_POST["str_month"]) && $_POST["str_month"] != null) ? $_POST["str_month"] : "";
-    $db_value = (isset($_POST["db_value"]) && $_POST["db_value"] != null) ? $_POST["db_value"] : "";
+    $str_date_withdrawal = (isset($_POST["str_date_withdrawal"]) && $_POST["str_date_withdrawal"] != null) ? $_POST["str_date_withdrawal"] : "";
+    $db_value_plot = (isset($_POST["db_value_plot"]) && $_POST["db_value_plot"] != null) ? $_POST["db_value_plot"] : "";
     $tb_city_id_city = (isset($_POST["tb_city_id_city"]) && $_POST["tb_city_id_city"] != null) ? $_POST["tb_city_id_city"] : "";
     $tb_beneficiaries_id_beneficiaries = (isset($_POST["tb_beneficiaries_id_beneficiaries"]) && $_POST["tb_beneficiaries_id_beneficiaries"] != null) ? $_POST["tb_beneficiaries_id_beneficiaries"] : "";
 } else if (!isset($id)) {
@@ -27,7 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = (isset($_GET["id"]) && $_GET["id"] != null) ? $_GET["id"] : "";
     $str_year = null;
     $str_month = null;
-    $db_value = null;
+    $str_date_withdrawal = null;
+    $db_value_plot = null;
     $tb_city_id_city = null;
     $tb_beneficiaries_id_beneficiaries = null;
 
@@ -36,32 +38,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "upd" && $id != "") {
 
-    $guaranteeCrop = new guaranteeCrop($id, '', '', '','','');
+    $familyBag = new familyBag($id, '', '', '','','','');
 
-    $resultado = $object->atualizar($guaranteeCrop);
+    $resultado = $object->atualizar($familyBag);
     $str_year = $resultado->getStrYear();
     $str_month = $resultado->getStrMonth();
-    $db_value = $resultado->getDbValue();
+    $str_date_withdrawal = $resultado->getStrDateWithdrawal();
+    $db_value_plot = $resultado->getDbValuePlot();
     $tb_city_id_city = $resultado->getTbCityIdCity();
     $tb_beneficiaries_id_beneficiaries = $resultado->getTbBeneficiariesIdBeneficiaries();
 
 }
 
-if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save" && $str_year != "" && $str_month!= "" && $db_value!= "") {
-    $guaranteeCrop = new guaranteeCrop($id, $str_year, $str_month, $db_value,$tb_city_id_city,$tb_beneficiaries_id_beneficiaries);
-    $msg = $object->save($guaranteeCrop);
+if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save" && $str_year != "" && $str_month!= "" && $db_value_plot!= ""&& $str_date_withdrawal!= "") {
+    $familyBag = new familyBag($id, $str_year, $str_month, $str_date_withdrawal, $db_value_plot, $tb_city_id_city, $tb_beneficiaries_id_beneficiaries);
+    $msg = $object->save($familyBag);
     $id = null;
     $str_year = null;
     $str_month = null;
-    $db_value = null;
+    $str_date_withdrawal = null;
+    $db_value_plot = null;
     $tb_city_id_city = null;
     $tb_beneficiaries_id_beneficiaries = null;
 
 }
 
 if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
-    $guaranteeCrop = new guaranteeCrop($id, '', '', '','','');
-    $msg = $object->remove($guaranteeCrop);
+    $familyBag = new familyBag($id, '', '', '','','','');
+    $msg = $object->remove($familyBag);
     $id = null;
 }
 
@@ -73,8 +77,8 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
             <div class='col-md-12'>
                 <div class='card'>
                     <div class='header'>
-                        <h4 class='title'>Guarantee Crop</h4>
-                        <p class='category'>List of Guarantee Crop of the system</p>
+                        <h4 class='title'>Family Bag</h4>
+                        <p class='category'>List of Family Bag of the system</p>
 
                     </div>
                     <div class='content table-responsive'>
@@ -138,10 +142,16 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
                                 ?>
                             </select>
                             <br/>
-                            Value:
-                            <input class="form-control" type="number" maxlength="4" name="db_value" value="<?php
+                            Date Withdrawal:
+                            <input class="form-control" type="date" name="str_date_withdrawal" value="<?php
                             // Preenche o sigla no campo sigla com um valor "value"
-                            echo (isset($db_value) && ($db_value != null || $db_value != "")) ? $db_value : '';
+                            echo (isset($str_date_withdrawal) && ($str_date_withdrawal != null || $str_date_withdrawal != "")) ? $str_date_withdrawal : '';
+                            ?>"/>
+                            <br/>
+                            Value Plot:
+                            <input class="form-control" type="number" name="db_value_plot" value="<?php
+                            // Preenche o sigla no campo sigla com um valor "value"
+                            echo (isset($db_value_plot) && ($db_value_plot != null || $db_value_plot != "")) ? $db_value_plot : '';
                             ?>"/>
                             <br/>
 

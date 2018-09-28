@@ -18,7 +18,7 @@ $template->mainpanel();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = (isset($_POST["id"]) && $_POST["id"] != null) ? $_POST["id"] : "";
     $str_year = (isset($_POST["str_year"]) && $_POST["str_year"] != null) ? $_POST["str_year"] : "";
-    $str_month = (isset($_POST["str_moth"]) && $_POST["str_moth"] != null) ? $_POST["str_moth"] : "";
+    $str_month = (isset($_POST["str_month"]) && $_POST["str_month"] != null) ? $_POST["str_month"] : "";
     $str_benefit_situation = (isset($_POST["str_benefit_situation"]) && $_POST["str_benefit_situation"] != null) ? $_POST["str_benefit_situation"] : "";
     $db_value_plot = (isset($_POST["db_value_plot"]) && $_POST["db_value_plot"] != null) ? $_POST["db_value_plot"] : "";
     $tb_city_id_city = (isset($_POST["tb_city_id_city"]) && $_POST["tb_city_id_city"] != null) ? $_POST["tb_city_id_city"] : "";
@@ -52,7 +52,6 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "upd" && $id != "") {
 
 if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save" && $str_year != "" && $str_month!= "" && $db_value_plot!= ""&& $str_benefit_situation!= "") {
     $peti = new peti($id, $str_year, $str_month, $str_benefit_situation, $db_value_plot, $tb_city_id_city, $tb_beneficiaries_id_beneficiaries);
-    var_dump($peti);
     $msg = $object->save($peti);
     $id = null;
     $str_year = null;
@@ -97,7 +96,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
                             ?>"/>
                             <br/>
                             Month:
-                            <input class="form-control" type="text" maxlength="2" name="str_moth" value="<?php
+                            <input class="form-control" type="text" maxlength="2" name="str_month" value="<?php
                             // Preenche o sigla no campo sigla com um valor "value"
                             echo (isset($str_month) && ($str_month != null || $str_month != "")) ? $str_month : '';
                             ?>"/>

@@ -17,7 +17,7 @@ $template->mainpanel();
 // Verificar se foi enviando dados via POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = (isset($_POST["id"]) && $_POST["id"] != null) ? $_POST["id"] : "";
-    $str_month = (isset($_POST["str_moth"]) && $_POST["str_moth"] != null) ? $_POST["str_moth"] : "";
+    $str_month = (isset($_POST["str_month"]) && $_POST["str_month"] != null) ? $_POST["str_month"] : "";
     $str_year = (isset($_POST["str_year"]) && $_POST["str_year"] != null) ? $_POST["str_year"] : "";
     $db_value = (isset($_POST["db_value"]) && $_POST["db_value"] != null) ? $_POST["db_value"] : "";
     $tb_beneficiaries_id_beneficiaries = (isset($_POST["tb_beneficiaries_id_beneficiaries"]) && $_POST["tb_beneficiaries_id_beneficiaries"] != null) ? $_POST["tb_beneficiaries_id_beneficiaries"] : "";
@@ -92,7 +92,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
                             ?>"/>
                             <br/>
                             Month:
-                            <input class="form-control" type="text" maxlength="2" name="str_moth" value="<?php
+                            <input class="form-control" type="text" maxlength="2" name="str_month" value="<?php
                             // Preenche o sigla no campo sigla com um valor "value"
                             echo (isset($str_month) && ($str_month != null || $str_month != "")) ? $str_month : '';
                             ?>"/>
