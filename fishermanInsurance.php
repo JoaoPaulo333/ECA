@@ -2,10 +2,10 @@
 
 require_once "classes/template.php";
 
-require_once "dao/guaranteeCropDAO.php";
-require_once "classes/guaranteeCrop.php";
+require_once "dao/fishermanInsuranceDAO.php";
+require_once "classes/fishermanInsurance.php";
 
-$object = new guaranteeCropDAO();
+$object = new fishermanInsuranceDAO();
 
 $template = new Template();
 
@@ -17,51 +17,52 @@ $template->mainpanel();
 // Verificar se foi enviando dados via POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = (isset($_POST["id"]) && $_POST["id"] != null) ? $_POST["id"] : "";
-    $str_year = (isset($_POST["str_year"]) && $_POST["str_year"] != null) ? $_POST["str_year"] : "";
     $str_month = (isset($_POST["str_moth"]) && $_POST["str_moth"] != null) ? $_POST["str_moth"] : "";
+    $str_year = (isset($_POST["str_year"]) && $_POST["str_year"] != null) ? $_POST["str_year"] : "";
     $db_value = (isset($_POST["db_value"]) && $_POST["db_value"] != null) ? $_POST["db_value"] : "";
-    $tb_city_id_city = (isset($_POST["tb_city_id_city"]) && $_POST["tb_city_id_city"] != null) ? $_POST["tb_city_id_city"] : "";
     $tb_beneficiaries_id_beneficiaries = (isset($_POST["tb_beneficiaries_id_beneficiaries"]) && $_POST["tb_beneficiaries_id_beneficiaries"] != null) ? $_POST["tb_beneficiaries_id_beneficiaries"] : "";
+    $tb_city_id_city = (isset($_POST["tb_city_id_city"]) && $_POST["tb_city_id_city"] != null) ? $_POST["tb_city_id_city"] : "";
 } else if (!isset($id)) {
     // Se não se não foi setado nenhum valor para variável $id
     $id = (isset($_GET["id"]) && $_GET["id"] != null) ? $_GET["id"] : "";
-    $str_year = null;
     $str_month = null;
+    $str_year = null;
     $db_value = null;
-    $tb_city_id_city = null;
     $tb_beneficiaries_id_beneficiaries = null;
+    $tb_city_id_city = null;
 
 
 }
 
 if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "upd" && $id != "") {
 
-    $guaranteeCrop = new guaranteeCrop($id, '', '', '','','');
+    $fishermanInsurance = new fishermanInsurance($id, '', '', '','','');
 
-    $resultado = $object->atualizar($guaranteeCrop);
-    $str_year = $resultado->getStrYear();
+    $resultado = $object->atualizar($fishermanInsurance);
     $str_month = $resultado->getStrMonth();
+    $str_year = $resultado->getStrYear();
     $db_value = $resultado->getDbValue();
-    $tb_city_id_city = $resultado->getTbCityIdCity();
     $tb_beneficiaries_id_beneficiaries = $resultado->getTbBeneficiariesIdBeneficiaries();
+    $tb_city_id_city = $resultado->getTbCityIdCity();
 
 }
 
 if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save" && $str_year != "" && $str_month!= "" && $db_value!= "") {
-    $guaranteeCrop = new guaranteeCrop($id, $str_year, $str_month, $db_value,$tb_city_id_city,$tb_beneficiaries_id_beneficiaries);
-    $msg = $object->save($guaranteeCrop);
+    $fishermanInsurance = new fishermanInsurance($id, $str_month, $str_year, $db_value, $tb_beneficiaries_id_beneficiaries, $tb_city_id_city);
+    var_dump($fishermanInsurance);
+    $msg = $object->save($fishermanInsurance);
     $id = null;
-    $str_year = null;
     $str_month = null;
+    $str_year = null;
     $db_value = null;
-    $tb_city_id_city = null;
     $tb_beneficiaries_id_beneficiaries = null;
+    $tb_city_id_city = null;
 
 }
 
 if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
-    $guaranteeCrop = new guaranteeCrop($id, '', '', '','','');
-    $msg = $object->remove($guaranteeCrop);
+    $fishermanInsurance = new guaranteeCrop($id, '', '', '','','');
+    $msg = $object->remove($fishermanInsurance);
     $id = null;
 }
 

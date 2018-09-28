@@ -19,7 +19,7 @@ class guaranteeCrop
      * guaranteeCrop constructor.
      * @param $idtb_guarantee_crop
      * @param $str_year
-     * @param $str_moth
+     * @param $str_month
      * @param $db_value
      * @param $tb_city_id_city
      * @param $tb_beneficiaries_id_beneficiaries
@@ -28,11 +28,22 @@ class guaranteeCrop
     {
         $this->idtb_guarantee_crop = $idtb_guarantee_crop;
         $this->str_year = $str_year;
-        $this->str_moth = $str_month;
+        $this->str_month = $str_month;
         $this->db_value = $db_value;
         $this->tb_city_id_city = $tb_city_id_city;
         $this->tb_beneficiaries_id_beneficiaries = $tb_beneficiaries_id_beneficiaries;
     }
+
+    /**
+     * guaranteeCrop constructor.
+     * @param $idtb_guarantee_crop
+     * @param $str_year
+     * @param $str_month
+     * @param $db_value
+     * @param $tb_city_id_city
+     * @param $tb_beneficiaries_id_beneficiaries
+     */
+
 
     /**
      * @return mixed
@@ -71,16 +82,23 @@ class guaranteeCrop
      */
     public function getStrMonth()
     {
-        return $this->str_moth;
+        return $this->str_month;
     }
 
     /**
-     * @param mixed $str_moth
+     * @param mixed $str_month
      */
-    public function setStrMonth($str_moth): void
+    public function setStrMonth($str_month): void
     {
-        $this->str_moth = $str_moth;
+        $this->str_month = $str_month;
     }
+
+
+
+    /**
+     * @return mixed
+     */
+
 
     /**
      * @return mixed
